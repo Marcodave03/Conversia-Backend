@@ -22,35 +22,34 @@
 # # Start the app
 # CMD ["npm", "start"]
 
-# Use official Node.js base image
 FROM node:18
 
-# Install FFmpeg and dependencies
+# Install ffmpeg and unzip
 RUN apt-get update && \
-    apt-get install -y ffmpeg wget unzip && \
+    apt-get install -y ffmpeg unzip wget && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Set working directory
+# Set working directory to project root
 WORKDIR /app
 
-# Download Rhubarb Lip Sync (Linux binary)
-RUN mkdir -p /app/bin/rhubarb && \
-    wget -O /app/bin/rhubarb/rhubarb.zip https://github.com/DanielSWolf/rhubarb-lip-sync/releases/download/v1.11.0/Rhubarb-Lip-Sync-Linux.zip && \
-    unzip /app/bin/rhubarb/rhubarb.zip -d /app/bin/rhubarb && \
-    chmod +x /app/bin/rhubarb/rhubarb && \
-    rm /app/bin/rhubarb/rhubarb.zip
-
-# Copy backend code
+# Copy your project into the container
 COPY . .
 
-# Install dependencies
+# Download and install Rhubarb
+RUN mkdir -p ./bin/rhubarb && \
+    wget -O /tmp/rhubarb.zip https://github.com/DanielSWolf/rhubarb-lip-sync/releases/download/v1.11.0/Rhubarb-Lip-Sync-Linux.zip && \
+    unzip /tmp/rhubarb.zip -d ./bin/rhubarb && \
+    chmod +x ./bin/rhubarb/rhubarb && \
+    rm /tmp/rhubarb.zip
+
+# Install Node.js dependencies
 RUN npm install --production
 
-# Expose your API port
+# Expose your backend port
 EXPOSE 5555
 
-# Start the server
+# Start your server
 CMD ["npm", "start"]
 
 
