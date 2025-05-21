@@ -24,35 +24,27 @@
 
 FROM node:18
 
-# Install ffmpeg and unzip
-RUN apt-get update && \
-    apt-get install -y ffmpeg unzip wget && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+# Install dependencies
+RUN apt-get update && apt-get install -y ffmpeg wget unzip
 
-# Set working directory to project root
-WORKDIR /app
-
-# Copy your project into the container
-COPY . .
-
-# Download and install Rhubarb
-RUN mkdir -p ./bin/rhubarb && \
-    apt-get update && apt-get install -y wget unzip && \
+# Create bin directory for Rhubarb
+RUN mkdir -p /usr/local/bin/rhubarb && \
     wget -O /tmp/rhubarb.zip https://github.com/DanielSWolf/rhubarb-lip-sync/releases/download/v1.11.0/Rhubarb-Lip-Sync-Linux.zip && \
-    unzip /tmp/rhubarb.zip -d ./bin/rhubarb && \
-    chmod +x ./bin/rhubarb/rhubarb && \
+    unzip /tmp/rhubarb.zip -d /usr/local/bin/rhubarb && \
+    chmod +x /usr/local/bin/rhubarb/rhubarb && \
     rm /tmp/rhubarb.zip
 
+# Set working directory
+WORKDIR /app
 
-# Install Node.js dependencies
-RUN npm install --production
+# Copy files
+COPY . .
 
-# Expose your backend port
+# Install Node deps
+RUN npm install
+
+# Expose your port
 EXPOSE 5555
 
-# Start your server
+# Start the app
 CMD ["npm", "start"]
-
-
-
