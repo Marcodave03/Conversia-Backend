@@ -30,10 +30,11 @@ RUN apt-get update && apt-get install -y ffmpeg wget unzip
 # Create bin directory for Rhubarb
 RUN apt-get update && apt-get install -y wget unzip ffmpeg && \
     mkdir -p /usr/local/bin/rhubarb && \
-    wget -O /tmp/rhubarb.zip https://huggingface.co/cinapelit/tools/resolve/main/Rhubarb-Lip-Sync-Linux.zip && \
+    wget -O /tmp/rhubarb.zip https://github.com/DanielSWolf/rhubarb-lip-sync/releases/download/v1.11.0/Rhubarb-Lip-Sync-Linux.zip && \
     unzip /tmp/rhubarb.zip -d /usr/local/bin/rhubarb && \
     chmod +x /usr/local/bin/rhubarb/rhubarb && \
     rm /tmp/rhubarb.zip
+
 
 
 # Set working directory
