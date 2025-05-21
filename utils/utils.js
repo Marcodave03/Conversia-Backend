@@ -40,11 +40,25 @@ export async function elevenLabsTTS(apiKey, voiceId, text, outputFile) {
   await fsp.writeFile(outputFile, buffer);
 }
 
+// export async function generateLipSyncData(inputMp3, wavFile, jsonFile) {
+//   const rhubarbPath = path.resolve("bin", "rhubarb", "rhubarb");
+//   await execCommand(`ffmpeg -y -i "${inputMp3}" "${wavFile}"`);
+//   await execCommand(`cmd.exe /c ""${rhubarbPath}" -f json -o "${jsonFile}" "${wavFile}" -r phonetic"`);
+// }
+
 export async function generateLipSyncData(inputMp3, wavFile, jsonFile) {
   const rhubarbPath = path.resolve("bin", "rhubarb", "rhubarb");
   await execCommand(`ffmpeg -y -i "${inputMp3}" "${wavFile}"`);
-  await execCommand(`cmd.exe /c ""${rhubarbPath}" -f json -o "${jsonFile}" "${wavFile}" -r phonetic"`);
+
+  const isWindows = process.platform === "win32";
+  const command = isWindows
+    ? `cmd.exe /c "${rhubarbPath} -f json -o ${jsonFile} ${wavFile} -r phonetic"`
+    : `${rhubarbPath} -f json -o "${jsonFile}" "${wavFile}" -r phonetic`;
+
+  await execCommand(command);
 }
+
+
 
 export async function readJsonFile(filePath) {
   const content = await fsp.readFile(filePath, "utf8");
