@@ -47,7 +47,9 @@ export async function elevenLabsTTS(apiKey, voiceId, text, outputFile) {
 // }
 
 export async function generateLipSyncData(inputMp3, wavFile, jsonFile) {
-  const rhubarbPath = path.resolve("bin", "rhubarb", "rhubarb");
+  // const rhubarbPath = path.resolve("bin", "rhubarb", "rhubarb");
+  const rhubarbPath = "/usr/local/bin/rhubarb/rhubarb";
+
   await execCommand(`ffmpeg -y -i "${inputMp3}" "${wavFile}"`);
 
   const isWindows = process.platform === "win32";
