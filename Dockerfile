@@ -38,10 +38,12 @@ COPY . .
 
 # Download and install Rhubarb
 RUN mkdir -p ./bin/rhubarb && \
+    apt-get update && apt-get install -y wget unzip && \
     wget -O /tmp/rhubarb.zip https://github.com/DanielSWolf/rhubarb-lip-sync/releases/download/v1.11.0/Rhubarb-Lip-Sync-Linux.zip && \
     unzip /tmp/rhubarb.zip -d ./bin/rhubarb && \
     chmod +x ./bin/rhubarb/rhubarb && \
     rm /tmp/rhubarb.zip
+
 
 # Install Node.js dependencies
 RUN npm install --production
